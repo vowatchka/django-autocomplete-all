@@ -65,7 +65,7 @@ class ModelAdmin(admin.ModelAdmin, AutocompleteAllMixin):
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        if request.is_ajax and '/autocomplete/' in request.path:
+        if request.headers.get('x-requested-with', '').lower() == 'xmlhttprequest' and '/autocomplete/' in request.path:
             strip_begin = reverse('admin:index')
             url = urllib.parse.urlparse(request.headers['Referer'])
             referer = url.path                    # example: /admin/friends/friend/add, /admin/friends/friend/36/change
